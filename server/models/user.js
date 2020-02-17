@@ -28,7 +28,10 @@ var UserSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Password is required.'],
             minlength: [8, 'Password must be at least 8 characters in length.']
-        }
+        },
+        posted_properties: {
+            type: [PropertySchema]
+        },
     },
     {
         timestamps: true
@@ -41,13 +44,13 @@ var PropertySchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please enter an address.']
         },
-        unit: {
-            type: String,
-		},
-		propertyType: {
+        propertyType: {
             type: String,
             required: [true, 'Please enter a property type.'],
         },
+        unit: {
+            type: String,
+		},
         rentPrice: {
             type: Number
         },
@@ -74,7 +77,7 @@ var PropertySchema = new mongoose.Schema(
         },
         squareFeet: {
             type: Number
-        },
+        }
     },
     {
         timestamps: true

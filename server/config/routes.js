@@ -17,7 +17,7 @@ module.exports = function(app){
         rentallsController.findUserById(req, res);
     });
 
-    // Process new job posting
+    // Add new property
     app.post('/api/properties', (req, res) => {
         console.log(req.body);
         rentalsController.createProperty(req, res);

@@ -5,6 +5,7 @@ mongoose.Types.ObjectId;
 
 // Model Imports
 var User = mongoose.model('User');
+var Property = mongoose.model('Property');
 
 module.exports = {
     // Process new user registration form
@@ -100,6 +101,67 @@ module.exports = {
                 res.json({
                     message: "Success",
                     user: user
+                });
+            }
+        });
+    },
+
+    // Create a new property
+    createProperty: (req, res) => {
+        console.log('controller');
+        var property = new Property({
+            address: req.body.property.address,
+            propertyType: req.body.property.propertyType,
+            unit: req.body.property.unit
+        });
+        console.log('new property ----> ', property)
+        property.save((err) => {
+            if (err) {
+                console.log('------- Error: Property could not be saved.');
+                console.log(err);
+                res.json({
+                    message: "Error",
+                    error: err
+                });
+            } else {
+                User.findByIdAndUpdate({
+                    _id: req.body.userId
+                }, {
+                    $push: {
+                        posted_properties: property
+                    }
+                }, (err, property) => {
+                    if (err) {
+                        console.log('------ Error: Could not add property.');
+                        res.json({
+                            message: "Error",
+                            error: err
+                        });
+                    } else {
+                        console.log('------ Success: Property saved!');
+                        res.json({
+                            message: "Success",
+                            property: property
+                        });
+                    }
+                });
+            }
+        });
+    },
+
+    // Retrieve all properties
+    getAllProperties: (req, res) => {
+        Property.find({}, (err, properties) => {
+            if (err) {
+                console.log("------ Error: Could not retrieve all properties.");
+                res.json({
+                    message: "Error",
+                    error: err
+                });
+            } else {
+                res.json({
+                    message: "Success",
+                    properties: properties
                 });
             }
         });
